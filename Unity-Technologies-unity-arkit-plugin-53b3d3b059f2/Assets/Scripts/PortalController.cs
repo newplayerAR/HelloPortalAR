@@ -27,6 +27,8 @@ namespace UnityEngine.XR.iOS
 
             if (transform.InverseTransformPoint(playerPos).z <= 0)
             {
+                InsidePortal();
+                /*
                 if (isOutside)
                 {
                     isOutside = false;
@@ -39,6 +41,11 @@ namespace UnityEngine.XR.iOS
                     isOutside = true;
                     OutsidePortal();
                 }
+                */
+            }
+            else
+            {
+                OutsidePortal();
             }
         }
 
