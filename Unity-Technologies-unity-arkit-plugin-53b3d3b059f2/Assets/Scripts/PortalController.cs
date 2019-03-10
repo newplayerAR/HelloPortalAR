@@ -1,78 +1,85 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 namespace UnityEngine.XR.iOS
 {
 
     public class PortalController : MonoBehaviour
     {
-        public Material[] materials;
-        public MeshRenderer meshRenderer;
-        public UnityARVideo UnityARVideo;
+        public Transform device;
+        private bool wasInFront;
+        private bool inOtherWorld;
+        private bool isColliding;
 
-        private bool isInside = false;
-        private bool isOutside = true;
-
-        // Start is called before the first frame update
         void Start()
         {
-            OutsidePortal();
+            //start outside other world
+            SetMaterials(false);
         }
 
-        void OnTriggerStay(Collider col)
+        void SetMaterials(bool fullRender)
         {
-            Vector3 playerPos = Camera.main.transform.position +
-                                Camera.main.transform.forward * (Camera.main.nearClipPlane * 4);
+            var stencilTest = fullRender ? CompareFunction.NotEqual : CompareFunction.Equal;
+            Shader.SetGlobalInt("_StencilTest", (int)stencilTest);
+        }
 
-            if (transform.InverseTransformPoint(playerPos).z <= 0)
+        bool GetIsInFront()
+        {
+            Vector3 worldPos = device.position + device.forward * Camera.main.nearClipPlane;
+
+            Vector3 pos = transform.InverseTransformPoint(worldPos);
+            return pos.z >= 0 ? true : false;
+        }
+
+
+        //This technique registeres if the device has hit the portal, flipping the bool
+
+        void OnTriggerEnter(Collider other)
+        {
+            if (other.transform != device)
+                return;
+            //Important to do this for if the user re-enters the portal from the same side
+            wasInFront = GetIsInFront();
+            isColliding = true;
+        }
+
+        void OnTriggerExit(Collider other)
+        {
+            if (other.transform != device)
+                return;
+            isColliding = false;
+        }
+
+
+        /*If there has been a change in the relative position of the device to the portal, flip the
+         *Stencil Test
+         */
+
+        void WhileCameraColliding()
+        {
+            if (!isColliding)
+                return;
+            bool isInFront = GetIsInFront();
+            if ((isInFront && !wasInFront) || (wasInFront && !isInFront))
             {
-                InsidePortal();
-                /*
-                if (isOutside)
-                {
-                    isOutside = false;
-                    isInside = true;
-                    InsidePortal();
-                }
-                else if (isInside)
-                {
-                    isInside = false;
-                    isOutside = true;
-                    OutsidePortal();
-                }
-                */
+                inOtherWorld = !inOtherWorld;
+                SetMaterials(inOtherWorld);
             }
-            else
-            {
-                OutsidePortal();
-            }
+            wasInFront = isInFront;
         }
 
-        void OutsidePortal()
+        void OnDestroy()
         {
-            StartCoroutine(DelayChangeMat(3));
+            //ensure geometry renders in the editor
+            SetMaterials(true);
         }
 
-        void InsidePortal()
+
+        void Update()
         {
-            StartCoroutine(DelayChangeMat(6));
-        }
-
-        IEnumerator DelayChangeMat(int stencilNum)
-        {
-            UnityARVideo.shouldRender = false;
-            yield return new WaitForEndOfFrame();
-            meshRenderer.enabled = false;
-
-            foreach (Material mat in materials)
-            {
-                mat.SetInt("_Stencil", stencilNum);
-            }
-
-            yield return new WaitForEndOfFrame();
-            meshRenderer.enabled = true;
-            UnityARVideo.shouldRender = true;
+            WhileCameraColliding();
         }
     }
 }

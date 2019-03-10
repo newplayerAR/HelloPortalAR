@@ -6,6 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/UnityARKitPlugin/Examples/UnityARKitScene/UnityARKitScene.unity
-    guid: c159f2591a9b5c843b0a0442451f78f8
+    path: Assets/Scenes/SecondPortal.unity
+    guid: bfd4000ccb5204330a54151cd70a5e37
   m_configObjects: {}

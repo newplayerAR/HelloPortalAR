@@ -23,6 +23,7 @@ ExportedObj/
 *.svd
 *.pdb
 *.opendb
+*.mp4
 
 # Unity3D generated meta files
 *.pidb.meta
@@ -35,3 +36,4 @@ sysinfo.txt
 *.apk
 *.unitypackage
 FirstPortal/
+SecondPortal/

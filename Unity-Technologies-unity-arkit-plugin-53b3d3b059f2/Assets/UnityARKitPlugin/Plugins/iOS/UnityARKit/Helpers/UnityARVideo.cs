@@ -9,8 +9,6 @@ namespace UnityEngine.XR.iOS
     public class UnityARVideo : MonoBehaviour
     {
         public Material m_ClearMaterial;
-        [HideInInspector]
-        public bool shouldRender = true;
 
         private CommandBuffer m_VideoCommandBuffer;
         private Texture2D _videoTextureY;
@@ -56,7 +54,6 @@ namespace UnityEngine.XR.iOS
 
         public void OnPreRender()
         {
-        if (shouldRender) {
 			ARTextureHandles handles = UnityARSessionNativeInterface.GetARSessionNativeInterface().GetARVideoTextureHandles();
             if (handles.IsNull())
             {
@@ -91,7 +88,7 @@ namespace UnityEngine.XR.iOS
             _videoTextureCbCr.UpdateExternalTexture(handles.TextureCbCr);
 
 			m_ClearMaterial.SetMatrix("_DisplayTransform", _displayTransform);
-        }
+
         }
 #else
 

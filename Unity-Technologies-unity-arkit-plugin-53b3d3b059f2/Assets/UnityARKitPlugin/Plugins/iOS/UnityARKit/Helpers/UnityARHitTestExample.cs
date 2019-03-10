@@ -18,6 +18,7 @@ namespace UnityEngine.XR.iOS
                     m_HitTransform.position = UnityARMatrixOps.GetPosition (hitResult.worldTransform);
                     m_HitTransform.rotation = UnityARMatrixOps.GetRotation (hitResult.worldTransform);
                     Debug.Log (string.Format ("x:{0:0.######} y:{1:0.######} z:{2:0.######}", m_HitTransform.position.x, m_HitTransform.position.y, m_HitTransform.position.z));
+                    // Make the portal to always be facing camera on spawn
                     Vector3 currAngle = transform.eulerAngles;
                     transform.LookAt(Camera.main.transform);
                     transform.eulerAngles = new Vector3(currAngle.x, transform.eulerAngles.y, currAngle.z);

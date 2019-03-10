@@ -2,9 +2,9 @@
 {
     SubShader
     {
-        Zwrite off
-        Colormask 0
-        cull off
+        ZWrite off
+        ColorMask 0
+        Cull off
         
         Stencil{
             Ref 1
