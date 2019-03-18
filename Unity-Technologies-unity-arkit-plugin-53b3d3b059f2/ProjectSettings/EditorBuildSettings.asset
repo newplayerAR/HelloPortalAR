@@ -5,7 +5,13 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/SecondPortal.unity
     guid: bfd4000ccb5204330a54151cd70a5e37
+  - enabled: 0
+    path: Assets/UnityARKitPlugin/ARKitRemote/UnityARKitRemote.unity
+    guid: 3ed73c0c9d4b76a418a0541c0cefd3ac
+  - enabled: 1
+    path: Assets/Scenes/ToyBlocksAR.unity
+    guid: aabe943bb1e334af1938a14d435a2486
   m_configObjects: {}

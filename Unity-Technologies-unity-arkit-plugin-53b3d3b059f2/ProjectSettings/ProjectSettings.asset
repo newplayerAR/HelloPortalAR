@@ -156,7 +156,7 @@ PlayerSettings:
     Android: com.Company.ProductName
     Standalone: unity.Unity Technologies.Native Rendering Plugin Example
     Tizen: com.Company.ProductName
-    iOS: com.newplayerAR.SecondPortal
+    iOS: com.newplayerAR.ToyBlocksAR
     tvOS: com.Company.ProductName
   buildNumber:
     iOS: 0
