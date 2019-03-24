@@ -1,10 +1,10 @@
 fileFormatVersion: 2
 guid: 31cac8edf84834043ac167deaeba16a9
-timeCreated: 1493058396
-licenseType: Pro
 MonoImporter:
+  externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - planePrefab: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

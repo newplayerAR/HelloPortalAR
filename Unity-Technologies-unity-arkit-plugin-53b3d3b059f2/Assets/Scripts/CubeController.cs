@@ -17,6 +17,10 @@ namespace UnityEngine.XR.iOS
                 if (touch.phase == TouchPhase.Began)
                 {
                     Transform m_HitTransform = GetComponent<CursorController>().m_HitTransform;
+
+                    // workaround attempt#0
+                    //m_HitTransform.position = new Vector3(m_HitTransform.position.x, m_HitTransform.position.y + prefab.transform.localScale.y / 2.0f, m_HitTransform.position.z);
+
                     Instantiate(prefab, m_HitTransform.position, m_HitTransform.rotation);
                 }
             }
