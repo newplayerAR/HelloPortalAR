@@ -9,10 +9,24 @@ namespace UnityEngine.XR.iOS
         public Transform m_HitTransform;
         //public float maxRayDistance = 200.0f;
         public LayerMask collisionLayer = 1 << 10;  //ARKitPlane layer
-        public int frameLimit = 15;
+        public int frameLimit = 10;
         private int curFrame;
         private bool pointIsValid;
         private bool gameObjectHitted;
+        private GameObject curCube;
+
+        public bool GameObjectHitted
+        {
+            get
+            {
+                return gameObjectHitted;
+            }
+
+            set
+            {
+                gameObjectHitted = value;
+            }
+        }
 
         //private bool test = false;
         //private Vector3 original = new Vector3(0.025f, 0.025f, 0.025f);
@@ -52,7 +66,7 @@ namespace UnityEngine.XR.iOS
                     m_HitTransform.position = hit.point;
                     m_HitTransform.rotation = Quaternion.FromToRotation(Vector3.up, hit.normal);
                     Debug.Log(string.Format("HitTest::: x:{0:0.######} y:{1:0.######} z:{2:0.######}", m_HitTransform.position.x, m_HitTransform.position.y, m_HitTransform.position.z));
-
+                    curCube = hit.transform.gameObject;
                     return true;
                 }
             }
@@ -71,18 +85,20 @@ namespace UnityEngine.XR.iOS
             // check if gameObject is hit
             pointIsValid = HitTestWithGameObject();
 
-            if (pointIsValid) {
+            if (pointIsValid)
+            {
                 curFrame = 0;
-                gameObjectHitted = true;
+                GameObjectHitted = true;
                 return;
             }
-            // Temporary workaround for the issue "Physics.Raycast sometimes misses"
-            else if (gameObjectHitted)
+            // Temporary workaround only --- For the issue of "Physics.Raycast sometimes misses"
+            else if (GameObjectHitted)
             {
                 if (curFrame > frameLimit)
                 {
                     curFrame = 0;
-                    gameObjectHitted = false;
+                    GameObjectHitted = false;
+                    curCube = null;
                 }
                 else
                 {
@@ -114,7 +130,7 @@ namespace UnityEngine.XR.iOS
 
         void SetCursor()
         {
-            if(pointIsValid)
+            if (pointIsValid)
             {
                 cursor.SetActive(true);
                 Debug.Log(string.Format("SetCursor::: x:{0:0.######} y:{1:0.######} z:{2:0.######}", m_HitTransform.position.x, m_HitTransform.position.y, m_HitTransform.position.z));
@@ -122,7 +138,7 @@ namespace UnityEngine.XR.iOS
             }
             else
             {
-                cursor.SetActive(false);
+                if (!GameObjectHitted) cursor.SetActive(false);
             }
         }
 
@@ -138,12 +154,21 @@ namespace UnityEngine.XR.iOS
             m_HitTransform = cursor.transform;
             curFrame = 0;
             pointIsValid = false;
-            gameObjectHitted = false;
+            GameObjectHitted = false;
         }
 
         public bool GetPointIsValid()
         {
             return pointIsValid;
+        }
+
+        public void DeleteCurCube()
+        {
+            if (curCube != null)
+            {
+                // Destroy method will be added;
+                Destroy(this.curCube);
+            }
         }
     }
 }
